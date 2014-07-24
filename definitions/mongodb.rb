@@ -202,7 +202,10 @@ define :mongodb_instance,
   end
 
   # replicaset
-  if new_resource.is_replicaset && new_resource.auto_configure_replicaset
+  #if new_resource.is_replicaset && new_resource.auto_configure_replicaset
+  if OpsWorksHelper.opsworks?(node)
+    rs_nodes = OpsWorksHelper.replicaset_members(node)
+  else
     rs_nodes = search(
       :node,
       "mongodb_cluster_name:#{new_resource.replicaset['mongodb']['cluster_name']} AND \
